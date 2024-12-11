@@ -29,7 +29,22 @@ def get_task(task_id: UUID):
     for task in tasks:
         if task.id == task_id:
             return task
-    return HTTPException(status_code=404, detail="Task not found")
+    raise HTTPException(status_code=404, detail="Task not found")
+
+@app.put("tasks/{task_id}", response_model=Task)
+def update_task(task_id: UUID, task_update: Task):
+    for ind, item in enumerate(tasks):
+        if item.id == task_id:
+            tasks[ind] = item.copy(update=task_update.dict(exclude_unset=True))
+            return tasks[ind]
+    raise HTTPException(status_code=404, detail="Task not found")
+
+@app.delete("/tasks/{task_id}", response_model=Task)
+def delete_task(task_id):
+    for ind, task in enumerate(tasks):
+        if task.id == task_id:
+            return tasks.pop(ind)
+    raise HTTPException(status_code=404, detail="Task not found")
 
 if __name__ == "__main__":
     import  uvicorn
