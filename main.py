@@ -19,7 +19,7 @@ def create_task(task: Task):
     tasks.append(task)
     return task
 
-@app.get("/tasks/", response_model = List[Task])
+@app.get("/tasks/", response_model = list[Task])
 def get_tasks():
     return tasks
 
