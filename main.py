@@ -1,15 +1,14 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional, List
 from uuid import uuid4, UUID
 
 api_key = "YOUR_API_KEY"
 app = FastAPI()
 
 class Task(BaseModel):
-    id: Optional[UUID] = None
+    id: UUID | None = None
     title: str
-    description: Optional[str] = None
+    description: str | None = None
     completed: bool = False
 
 tasks = []
