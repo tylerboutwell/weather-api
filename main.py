@@ -14,36 +14,36 @@ class Forecast(BaseModel):
 forecasts = []
 
 @app.post("/forecasts/", response_model=Forecast)
-def create_task(forecast: Forecast):
+def create_forecast(forecast: Forecast):
     forecast.id = uuid4()
     forecasts.append(forecast)
     return forecasts
 
 @app.get("/forecasts/", response_model = list[Forecast])
-def get_tasks():
+def get_forecasts():
     return forecasts
 
-@app.get("/forecasts/{task_id}", response_model=Forecast)
-def get_task(forecast_id: UUID):
+@app.get("/forecasts/{forecast_id}", response_model=Forecast)
+def get_forecast(forecast_id: UUID):
     for forecast in forecasts:
         if forecast.id == forecast_id:
             return forecast
-    raise HTTPException(status_code=404, detail="Task not found")
+    raise HTTPException(status_code=404, detail="Forecast not found")
 
-@app.put("/tasks/{task_id}", response_model=Forecast)
-def update_task(task_id: UUID, forecast_update: Forecast):
+@app.put("/forecasts/{forecast_id}", response_model=Forecast)
+def update_forecast(forecast_id: UUID, forecast_update: Forecast):
     for ind, item in enumerate(forecasts):
-        if item.id == task_id:
+        if item.id == forecast_id:
             forecasts[ind] = item.copy(update=forecast_update.model_dump(exclude_unset=True))
             return forecasts[ind]
-    raise HTTPException(status_code=404, detail="Task not found")
+    raise HTTPException(status_code=404, detail="Forecast not found")
 
-@app.delete("/tasks/{task_id}", response_model=Forecast)
-def delete_task(task_id: UUID):
-    for ind, task in enumerate(forecasts):
-        if task.id == task_id:
+@app.delete("/forecasts/{forecast_id}", response_model=Forecast)
+def delete_forecast(forecast_id: UUID):
+    for ind, forecast in enumerate(forecasts):
+        if forecast.id == forecast_id:
             return forecasts.pop(ind)
-    raise HTTPException(status_code=404, detail="Task not found")
+    raise HTTPException(status_code=404, detail="Forecast not found")
 
 if __name__ == "__main__":
     import  uvicorn
