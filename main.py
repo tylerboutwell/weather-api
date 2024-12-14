@@ -9,7 +9,6 @@ class Forecast(BaseModel):
     id: UUID | None = None
     title: str
     description: str | None = None
-    completed: bool = False
 
 forecasts = []
 
@@ -17,7 +16,7 @@ forecasts = []
 def create_forecast(forecast: Forecast):
     forecast.id = uuid4()
     forecasts.append(forecast)
-    return forecasts
+    return forecast
 
 @app.get("/forecasts/", response_model = list[Forecast])
 def get_forecasts():
