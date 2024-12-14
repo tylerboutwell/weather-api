@@ -5,44 +5,44 @@ from uuid import uuid4, UUID
 api_key = "YOUR_API_KEY"
 app = FastAPI()
 
-class Task(BaseModel):
+class Forecast(BaseModel):
     id: UUID | None = None
     title: str
     description: str | None = None
     completed: bool = False
 
-tasks = []
+forecasts = []
 
-@app.post("/tasks/", response_model=Task)
-def create_task(task: Task):
-    task.id = uuid4()
-    tasks.append(task)
-    return task
+@app.post("/forecasts/", response_model=Forecast)
+def create_task(forecast: Forecast):
+    forecast.id = uuid4()
+    forecasts.append(forecast)
+    return forecasts
 
-@app.get("/tasks/", response_model = list[Task])
+@app.get("/forecasts/", response_model = list[Forecast])
 def get_tasks():
-    return tasks
+    return forecasts
 
-@app.get("/tasks/{task_id}", response_model=Task)
-def get_task(task_id: UUID):
-    for task in tasks:
-        if task.id == task_id:
-            return task
+@app.get("/forecasts/{task_id}", response_model=Forecast)
+def get_task(forecast_id: UUID):
+    for forecast in forecasts:
+        if forecast.id == forecast_id:
+            return forecast
     raise HTTPException(status_code=404, detail="Task not found")
 
-@app.put("/tasks/{task_id}", response_model=Task)
-def update_task(task_id: UUID, task_update: Task):
-    for ind, item in enumerate(tasks):
+@app.put("/tasks/{task_id}", response_model=Forecast)
+def update_task(task_id: UUID, forecast_update: Forecast):
+    for ind, item in enumerate(forecasts):
         if item.id == task_id:
-            tasks[ind] = item.copy(update=task_update.model_dump(exclude_unset=True))
-            return tasks[ind]
+            forecasts[ind] = item.copy(update=forecast_update.model_dump(exclude_unset=True))
+            return forecasts[ind]
     raise HTTPException(status_code=404, detail="Task not found")
 
-@app.delete("/tasks/{task_id}", response_model=Task)
+@app.delete("/tasks/{task_id}", response_model=Forecast)
 def delete_task(task_id: UUID):
-    for ind, task in enumerate(tasks):
+    for ind, task in enumerate(forecasts):
         if task.id == task_id:
-            return tasks.pop(ind)
+            return forecasts.pop(ind)
     raise HTTPException(status_code=404, detail="Task not found")
 
 if __name__ == "__main__":
