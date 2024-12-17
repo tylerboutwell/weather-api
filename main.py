@@ -53,6 +53,6 @@ def delete_forecast(forecast_id: UUID):
     raise HTTPException(status_code=404, detail="Forecast not found")
 
 if __name__ == "__main__":
-    import  uvicorn
+    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
