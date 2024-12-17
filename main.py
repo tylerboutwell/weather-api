@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from uuid import uuid4, UUID
+import requests
 
 api_key = "YOUR_API_KEY"
 app = FastAPI()
@@ -28,6 +29,13 @@ def get_forecast(forecast_id: UUID):
         if forecast.id == forecast_id:
             return forecast
     raise HTTPException(status_code=404, detail="Forecast not found")
+
+@app.get("/forecasts/")
+def get_current_forecast(lat: int, lon: int):
+    curr = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}")
+    if curr.status_code != 200:
+        raise HTTPException(status_code=404, detail="Forecast not found")
+    return curr.json()
 
 @app.put("/forecasts/{forecast_id}", response_model=Forecast)
 def update_forecast(forecast_id: UUID, forecast_update: Forecast):
