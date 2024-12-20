@@ -1,9 +1,11 @@
+import os
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from uuid import uuid4, UUID
 import requests
 
-api_key = "YOUR_API_KEY"
+api_key = os.getenv("api_key", "DEF")
 app = FastAPI()
 
 class Forecast(BaseModel):
@@ -30,12 +32,14 @@ def get_forecast(forecast_id: UUID):
             return forecast
     raise HTTPException(status_code=404, detail="Forecast not found")
 
-@app.get("/forecasts/")
+@app.get("/forecasts/current/")
 def get_current_forecast(lat: int, lon: int):
+    if not api_key:
+        raise HTTPException(status_code=404, detail=f"No API key provided. Showing {api_key}")
     curr = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}")
     if curr.status_code != 200:
         raise HTTPException(status_code=404, detail="Forecast not found")
-    return curr.json()
+    return {"this is a response.."}
 
 @app.put("/forecasts/{forecast_id}", response_model=Forecast)
 def update_forecast(forecast_id: UUID, forecast_update: Forecast):
