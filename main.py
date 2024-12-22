@@ -6,7 +6,8 @@ from uuid import uuid4, UUID
 import requests
 from dotenv import load_dotenv
 
-api_key = os.getenv("api_key", "DEF")
+load_dotenv()
+api_key = os.getenv("api_key")
 app = FastAPI()
 
 class Forecast(BaseModel):
