@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from uuid import uuid4, UUID
 import requests
+from dotenv import load_dotenv
 
 api_key = os.getenv("api_key", "DEF")
 app = FastAPI()
