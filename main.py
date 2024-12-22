@@ -41,7 +41,7 @@ def get_current_forecast(lat: int, lon: int):
     curr = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=imperial")
     if curr.status_code != 200:
         raise HTTPException(status_code=curr.status_code, detail=f"Forecast not found, api = {api_key}")
-    return {"current temperature": curr.json()["main"]["temp"]}
+    return curr.json()
 
 @app.put("/forecasts/{forecast_id}", response_model=Forecast)
 def update_forecast(forecast_id: UUID, forecast_update: Forecast):
