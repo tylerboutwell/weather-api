@@ -21,6 +21,7 @@ def get_current_weather(city: str):
     cache = rd.get(city)
     if cache:
         print("Cache hit")
+        print(rd.ttl(city))
         return json.loads(cache)
     else:
         print("Cache miss")
@@ -28,6 +29,7 @@ def get_current_weather(city: str):
         if curr.status_code != 200:
             raise HTTPException(status_code=curr.status_code, detail=f"Forecast not found, api = {api_key}")
         rd.set(city, curr.text)
+        rd.expire(city, 3600)
         return curr.json()
 
 if __name__ == "__main__":
