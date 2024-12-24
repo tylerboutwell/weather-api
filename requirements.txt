@@ -3,3 +3,4 @@ pydantic
 requests
 uvicorn
 python-dotenv
+redis
